@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "trybasis",
+    "slug": "trybasis",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "trybasis"
+}
