@@ -1,139 +1,61 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button } from 'react-native-paper';
-import Loading from './Components/Loading';
-import TextInputExample from './Components/TextForm';
-import SimpleList from './Components/SimpleList';
-import HomeScreen from './Components/HomeScreen';
-import { NavigationContainer, useNavigation, DrawerActions } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ProfileScreen from './Components/ProfileScreen';
-import UserScreen from './Components/UserScreen';
-import 'react-native-gesture-handler';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/Entypo';
-
-const StackNav = () => {
-  const Stack = createNativeStackNavigator();
-  const navigation = useNavigation();
-  return (
-    <Stack.Navigator initialRouteName='Home' screenOptions={{
-      statusBarColor: 'teal',
-      headerStyle: {
-        backgroundColor: 'teal'
-      },
-      headerTintColor: '#fff',
-      headerTitleAlign: 'center',
-      headerLeft: ()=>{
-        return(
-          <Icon name='menu' size={30} color='#fff' 
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())} />
-        )
-      }
-    }}>
-      <Stack.Screen name="Home" component={HomeScreen} options={{}} />
-      <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: true }} />
-      <Stack.Screen name="User" component={UserScreen} />
-    </Stack.Navigator>
-  )
-}
-
-const DrawerNav = () => {
-  const Drawer = createDrawerNavigator();
-  return (
-    <Drawer.Navigator screenOptions={{
-      headerShown: false
-    }}>
-      <Drawer.Screen name='Home' component={StackNav} />
-      {/* <Drawer.Screen name='Profile' component={ProfileScreen} />
-      <Drawer.Screen name='User' component={UserScreen} /> */}
-    </Drawer.Navigator>
-  )
-}
+import { View, Text, Image, ImageBackground, ScrollView, Button, Pressable, Modal, StatusBar, ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import logoImg from './assets/adaptive-icon.png';
+import { useState } from 'react';
+import Greet from './components/Greet';
+import Box from './components/Box';
 
 export default function App() {
+  let [isModelVisible, setIsModelVisible] = useState(false);
   return (
-    <NavigationContainer>
-      <DrawerNav />
-    </NavigationContainer>
+    <View style={[styles.container, styles.text]}>
+      <StatusBar backgroundColor='lightblue' barStyle='light-content' hidden />
+      <ScrollView>
+        <ImageBackground source={logoImg} >
+          <View style={{ width: 200, height: 200, backgroundColor: "lightblue" }}></View>
+          <View style={{ width: 200, height: 200, backgroundColor: "lightgreen" }}></View>
+          <Text>
+            Welcome
+            <Text style={styles.text}> back!</Text> 
+          </Text>
+          <Image source={logoImg} style={{ width: 100, height: 100 }} />
+          <Pressable onPressOut={() => console.log("Image pressed")}>
+            <Image source={{ uri: "https://picsum.photos/200" }} style={{ width: 200, height: 200 }} />
+          </Pressable>
+          <Button title='Open Model' onPress={() => setIsModelVisible(true)} color="green" />
+          <Modal visible={isModelVisible} onRequestClose={() => setIsModelVisible(false)} animationType='slide' presentationStyle='pageSheet'>
+            <View>
+              <Text>Modal content</Text>
+              <Button title='close' onPress={() => setIsModelVisible(false)} />
+            </View>
+          </Modal>
+        </ImageBackground>
+        <ActivityIndicator size='large' color='midnightblue' animating={true} />
+        <Button title='Alert' onPress={() => Alert.alert("Invalid Data!", "DOB missing", [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel pressed")
+          },
+          {
+            text: "OK",
+            onPress: () => console.log("OK pressed")
+          }
+        ])} />
+        <Greet name="apple" />
+        <Greet name="orange" />
+        <Box style={{color: 'red'}}>Box 1</Box>
+        <Box style={{color: 'green'}}>Box 2</Box>
+        <Box style={{color: 'blue'}}>Box 3</Box>
+      </ScrollView>
+    </View>
   )
-
-
-
-  // const [loading, setLoading] = useState(false)
-  // const [form, setForm] = useState(false)
-  // const [list, setList] = useState(false)
-
-  // function showComponents(title) {
-  //   if (title == 'loading') {
-  //     setForm(false)
-  //     setList(false)
-  //     setLoading(true)
-  //   } else if(title=='form') {
-  //     setLoading(false)
-  //     setList(false)
-  //     setForm(true)
-  //   } else if(title == 'list') {
-  //     setLoading(false)
-  //     setForm(false)
-  //     setList(true)
-  //   } else {
-  //     setLoading(true)
-  //     setForm(true)
-  //     setList(true)
-  //   }
-  // }
-
-  // return (
-  //   <>
-  //     <View>
-  //       <Text style={styles.textStyle}>Components</Text>
-  //     </View>
-  //     <View>
-  //       <Button
-  //         style={[styles.buttons, { backgroundColor: 'red' }]}
-  //         textColor='white'
-  //         labelStyle={{ fontSize: 20 }}
-  //         onPress={() => showComponents('loading')}
-  //       >Show Loading</Button>
-  //       <Button
-  //         style={[styles.buttons, { backgroundColor: 'blue' }]}
-  //         textColor='white'
-  //         labelStyle={{ fontSize: 20 }}
-  //         onPress={() => showComponents('form')}
-  //       >Show Form</Button>
-  //       <Button
-  //         style={[styles.buttons, { backgroundColor: 'green' }]}
-  //         textColor='white'
-  //         labelStyle={{ fontSize: 20 }}
-  //         onPress={() => showComponents('list')}
-  //       >Show Flatlist</Button>
-  //       <Button
-  //         style={[styles.buttons, { backgroundColor: 'black' }]}
-  //         textColor='white'
-  //         labelStyle={{ fontSize: 20 }}
-  //         onPress={() => showComponents('all')}
-  //       >Show All</Button>
-  //     </View>
-  //     <View>
-  //       {loading ? <Loading /> : ""}
-  //       {form ? <TextInputExample /> : ""}
-  //       {list ? <SimpleList /> : ""}
-  //     </View>
-  //   </>
-  // );
 }
 
 const styles = StyleSheet.create({
-  textStyle: {
-    fontSize: 30,
-    color: 'black',
-    textAlign: 'center',
-    marginTop: 10,
+  container: {
+    flex: 1, backgroundColor: "plum", padding: 50
   },
-  buttons: {
-    width: '100%',
-    borderRadius: 3,
-    marginBottom: 10,
-  },
+  text: {
+    color: "white",
+    fontWeight: "bold"
+  }
 })
