@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "spm",
+    "slug": "spm",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "spm"
+}
